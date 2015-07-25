@@ -3,13 +3,13 @@ namespace :db do
   task :migrate => :app do
    require 'sequel/extensions/migration'
 
-   Sequel::Migrator.apply(Cms::App.database, 'db/migrations')
+   Sequel::Migrator.apply(MyApp::App.database, 'db/migrations')
   end
 
   desc 'Rollback migration'
   task :rollback => :app do
     require 'sequel/extensions/migration'
-    database = Cms::App.database
+    database = MyApp::App.database
 
     version  = (row = database[:schema_info].first) ? row[:version] : nil
     Sequel::Migrator.apply(database, 'db/migrations', version - 1)
@@ -17,7 +17,7 @@ namespace :db do
 
   desc 'Dump the database schema'
   task :dump => :app do
-    database = Cms::App.database
+    database = MyApp::App.database
 
     `sequel -d #{database.url} > db/schema.rb`
     `pg_dump --schema-only #{database.url} > db/schema.sql`

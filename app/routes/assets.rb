@@ -1,4 +1,4 @@
-module Cms
+module MyApp
   module Routes
     class Assets < Base
       get '/assets/*' do

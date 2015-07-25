@@ -1,4 +1,4 @@
-module Cms
+module MyApp
   module Routes
     class Base < Sinatra::Application
       configure do

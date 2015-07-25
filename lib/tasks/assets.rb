@@ -1,7 +1,7 @@
 namespace :assets do
   desc 'Precompile assets'
   task :precompile => :app do
-    assets = Cms::Routes::Base.assets
+    assets = MyApp::Routes::Base.assets
     target = Pathname(Brisk::App.root) + 'public/assets'
 
     assets.each_logical_path do |logical_path|

@@ -1,4 +1,4 @@
-module Cms
+module MyApp
     module Routes
       autoload :Apps, 'app/routes/apps'
       autoload :Assets, 'app/routes/assets'
