@@ -1,6 +1,10 @@
-<h1>User Record</h1>
-
-   Name : <%= @user.username %><br />
-   Email : <%= @user.email %>
-   First Name : <%= @user.first_name %><br />
-   Last Name : <%= @user.last_name %>
+ <h2>User Profile</h2>
+ <div style ="padding-bottom: 10px"><button><a href="/users/<%= @user.id %>/edit">Edit</a></button></div>
+ <table class="table">
+    <tr><td>ID : </td><td><%= @user.id %></td></tr>	
+    <tr><td>Name : </td><td><%= @user.username %></td></tr>
+    <tr><td>Email : </td><td><%= @user.email %></td></tr>
+    <tr><td>First Name : </td><td><%= @user.first_name %></td></tr>
+    <tr><td>Last Name : </td><td><%= @user.last_name %></td></tr>        
+  </table>
+  <hr>
