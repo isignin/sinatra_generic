@@ -5,10 +5,13 @@ module MyApp
         set :views, 'app/views'
         set :root, App.root
 
-        disable :method_override
+        enable :method_override
         disable :protection
         disable :static
-
+        
+        enable :partial_underscores
+        set :partial_template_engine, :erb
+        
         set :erb, escape_html: true,
                   layout_options: {views: 'app/views/layouts'}
 
