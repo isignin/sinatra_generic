@@ -39,16 +39,15 @@ module MyApp
     
     configure do
       register Sinatra::Partial
-
+      
       disable :static
       enable :session, :logging
+      set :method_override, true  
       
       file = File.new("#{settings.root}/log/#{settings.environment}.log", 'a+')
       file.sync = true
-
-      use Rack::CommonLogger, file
       
-      set :method_override, true
+      use Rack::CommonLogger, file
       
       set :sessions,
           :httponly     => true,

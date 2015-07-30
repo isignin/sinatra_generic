@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>My Project</title>
+  <title><%= ENV['PROJECT_TITLE'] %></title>
 
   <link rel="stylesheet" type="text/css" href="<%= asset_path 'layout.css' %>">
   <link rel="stylesheet" type="text/css" href="<%= asset_path 'bootstrap.css' %>">
@@ -13,7 +13,7 @@
 </head>
 <body>
   <div class="container">
-	  <h1>My Project Title</h1>
+	  <h1><%= ENV['PROJECT_TITLE'] %></h1>
       <%= partial 'layouts/flash_messages' %>	
       <%= yield %> 
       <hr>
