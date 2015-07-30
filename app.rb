@@ -39,8 +39,9 @@ module MyApp
     
     configure do
       register Sinatra::Partial
-      
+
       disable :static
+
       enable :session, :logging
       set :method_override, true  
       

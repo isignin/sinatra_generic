@@ -1,10 +1,6 @@
 module MyApp
   module Routes
     class Users < Base
-      configure do
-        enable :partial_underscores
-        set :partial_template_engine, :erb
-      end
           
       get '/users' do
         @users = User.all
