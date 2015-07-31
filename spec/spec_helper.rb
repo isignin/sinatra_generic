@@ -1,7 +1,8 @@
 # spec/spec_helper.rb
 
 ENV['RACK_ENV'] = 'test'
-require File.join(File.dirname(__FILE__), '..', 'app.rb')
+
+require File.expand_path '../../app.rb', __FILE__
  
 require 'rack/test'
 require 'rspec'

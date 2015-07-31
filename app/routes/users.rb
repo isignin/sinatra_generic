@@ -17,6 +17,11 @@ module MyApp
         erb :"users/show"
       end
       
+      get "/users/:id/edit" do
+        @user = User[params[:id]]
+        erb :"users/edit"
+      end
+      
       post '/users' do
         @user = User.new params[:user]
         if @user.save
@@ -31,13 +36,14 @@ module MyApp
          @user = User[params[:id]]
          if !@user.nil? && @user.update(params[:user])
            flash.now[:notice]= "Record updated successfully"
+           erb :"/users/show"
          else
            flash.now[:alert]= "Error updating record"
          end 
       end
       
         
-      delete '/user/:id' do
+      delete '/users/:id' do
         user = User[params[:id]]
         if !user.nil? 
           if user.delete
