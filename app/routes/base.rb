@@ -17,7 +17,9 @@ module MyApp
 
         enable :use_code
       end
-
+      
+      PROJECT_TITLE ||= ENV['PROJECT_TITLE']
+      
       register Extensions::Assets
       helpers Helpers
       helpers Sinatra::ContentFor
