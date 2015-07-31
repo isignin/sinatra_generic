@@ -39,7 +39,8 @@ group :development do
   gem 'byebug'
 end
 
-group :development, :test do
+group :test do
   gem 'rspec'
   gem 'rack-test'
+  gem 'faker'
 end  

@@ -40,6 +40,8 @@ GEM
     erubis (2.7.0)
     eventmachine (1.0.7)
     execjs (2.5.2)
+    faker (1.4.3)
+      i18n (~> 0.5)
     i18n (0.7.0)
     json (1.7.7)
     mail (2.6.3)
@@ -120,6 +122,7 @@ DEPENDENCIES
   dotenv
   eco
   erubis
+  faker
   i18n
   json (~> 1.7.7)
   memcachier
