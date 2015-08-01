@@ -1,0 +1,20 @@
+  <div id='navigation' class="clearfix"></div>
+  <div id="content_wrapper">
+	<div id='content'>
+		<div class="login_view">
+			<div class="title_icon"><img src="tangerine_logo_sm.png" id="logo_small"></div>
+			<h3 style="padding-top: 30px">Create a New Account</h3>
+			<div style="margin-top: 30px">
+				<form action="/sign_up" method="post">
+				  Username: <input type="text" name="user[username]" value="<%= @user.username%>"><br>
+				  Email: <input type="email" name="user[email]" value="<%= @user.email%>"><br>
+				  First Name: <input type="text" name="user[first_name]" value="<%= @user.first_name%>"><br>
+				  Last Name: <input type="text" name="user[last_name]" value="<%= @user.last_name%>"><br>	  
+				  Password: <input type="password" name="user[password]"><br>
+				  Confirm Password: <input type="password" name="user[password_confirmation]"><br>
+				  <button type="submit">Submit</button>
+				</form>
+			</div>	
+		</div>
+	</div>
+</div>

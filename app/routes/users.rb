@@ -47,13 +47,13 @@ module MyApp
         user = User[params[:id]]
         if !user.nil? 
           if user.delete
-            "Record delete successfully"
+            flash.now[:notice]="Record delete successfully"
           else
             status 500
             json user.errors.full_message
           end
         else
-          "Record Not found"
+          flash.now[:alert]="Record Not found"
         end  
       end  
       
@@ -62,44 +62,56 @@ module MyApp
       end  
       
       post '/login' do
-
         @user = User[:username => params[:username]]
          if !@user.nil?
-           if @user.authenticate(params[:password]).nil?
-              flash.now[:notice] = "Incorrect password" 
-              redirect '/login'    
-            else 
-              if !@user.verified
-               flash.now[:notice] = "User is not verified"
-               redirect '/login'
-              else
+           if @user.verified == 0
+            flash.now[:alert] = "Your Email address has not been verified"
+            erb :'users/login'
+           else
+             if @user.authenticate(params[:password]).nil?
+                flash.now[:notice] = "Incorrect password" 
+                erb :'users/login'    
+             else
                 flash.now[:notice] = "User is verified. You are ok, #{@user.username}"
-                redirect "/"
               end 
-            end  
+           end  
          else
-          flash.now[:notice] = "I don't know you #{params[:username]}"
-          redirect '/login'
+          flash.now[:notice] = "Sorry. I don't know you #{params[:username]}"
+          erb :'users/login'
          end
+      end
+      
+      get '/sign_up' do
+        @user = User.new
+        erb :"users/signup"
       end
       
       post '/sign_up' do
         require 'securerandom'
-        
-        @user = User.new params[:user]
-        @user.verified = false
-        @user.token = SecureRandom.urlsafe_base64.gsub(/\W+/, '')
-        if @user.save
-          #Send email
-          Pony.mail :to => @user.email,
-                    :from => 'admin@example.com',
-                    :subject => 'Email address verification',
-                    :body => erb(:"users/verification_mail")
-          flash.now[:notice]="Verification Email sent"
+        @user = User.new params[:user]  
+        if @user.password == @user.password_confirmation           
+          if User[:username => @user.username]
+            flash.now[:alert]="Username is already taken"
+            erb :"users/signup"
+          else  
+            @user.verified = false
+            @user.token = SecureRandom.urlsafe_base64.gsub(/\W+/, '')
+            if @user.save
+              #Send email
+              Pony.mail :to => @user.email,
+                        :from => 'admin@example.com',
+                        :subject => 'Email address verification',
+                        :body => erb(:"users/verification_mail")
+              flash.now[:notice]="Verification Email sent"
+            else
+              flash.now[:alert]="Error saving record"
+              erb :"users/signup"
+            end 
+          end
         else
-          flash.now[:alert]= "Error saving record"
-          user.errors.full_message
-        end    
+          flash.now[:alert]="Your passwords do not match"
+          erb :"users/signup"
+        end         
       end
       
       get '/verify/:token' do
@@ -115,6 +127,10 @@ module MyApp
         end
       end
       
+      get '/reset_password' do
+        erb :"users/password_reset_request"
+      end
+      
       post '/reset_password' do
         @user = User[:username => params[:username]]
         if !@user.nil?
@@ -126,11 +142,12 @@ module MyApp
                     :body => erb(:"users/password_reset_mail")
          flash.now[:notice]= "Password reset email sent"
         else
-          flash.now[:alert] = "I do not know you...."
+          flash.now[:alert]= "Sorry. I do not know you...."
+           erb :"users/password_reset_request"
         end    
       end
       
-      get '/reset_password/:long_token' do
+      get '/reset_password/:token' do
         @user = User[:token => params[:token]]
         if !@user.nil?
           @user.update(:token => nil)
@@ -140,20 +157,21 @@ module MyApp
         end
       end
       
-      post 'reset_now' do
-        if params[:password] == params[:pass_confirm]
-         @user = User[params[:id]]
+      post '/reset_pass' do
+        @user = User[params[:id]]
+        if params[:password] == params[:password_confirmation]
          if @user.nil?
-           flash.now[:alert]= "Do not know you..."
+           flash.now[:alert] = "Do not know you..."
          else
-           if @user.update(:password => params[:password])
+           if !@user.update(:password => params[:password], :password_confirmation => params[:password_confirmation]).nil?
              flash.now[:notice]="Password has been reset"
            else
-             flash.now[:alert]= "Error encountered resetting your password. Please contact your administrator"
+             flash.now[:alert]="Error encountered resetting your password. Please contact your administrator"
            end      
          end
         else
-          flash.now[:alert]= "New Password does not match your confirm password"
+          flash.now[:alert]="New Password does not match your confirmation password"
+          erb :"users/password_reset_form"
         end 
       end
           
