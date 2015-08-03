@@ -106,11 +106,20 @@ module MyApp
             @user.verified = false
             @user.token = SecureRandom.urlsafe_base64.gsub(/\W+/, '')
             if @user.save
-              #Send email
+              #Send email via Mandrill
               Pony.mail :to => @user.email,
                         :from => 'admin@example.com',
                         :subject => 'Email address verification',
-                        :body => erb(:"users/verification_mail")
+                        :html_body => erb(:"users/verification_mail"),
+                        #:via => :smtp,
+                        :via_options => {
+                            :address              => 'smtp.mandrillapp.com',
+                            :port                 => '587',
+                            :user_name            => ENV['SMTP_USER'],
+                            :password             => ENV['MANDRILL_APIKEY'],
+                            :enable_starttls_auto => false
+                          }
+                        
               flash.now[:notice]="Verification Email sent"
             else
               flash.now[:alert]="Error saving record"
@@ -144,11 +153,19 @@ module MyApp
         @user = User[:username => params[:username]]
         if !@user.nil?
           @user.update(:token => SecureRandom.urlsafe_base64.gsub(/\W+/, ''))
-          #Send reset email
+          #Send reset email via Mandrill
           Pony.mail :to => @user.email,
                     :from => 'admin@example.com',
                     :subject => 'Password reset',
-                    :body => erb(:"users/password_reset_mail")
+                    :html_body => erb(:"users/password_reset_mail"),
+                    #:via => :smtp,
+                    :via_options => {
+                        :address              => 'smtp.mandrillapp.com',
+                        :port                 => '587',
+                        :user_name            => ENV['SMTP_USER'],
+                        :password             => ENV['MANDRILL_APIKEY'],
+                        :enable_starttls_auto => false
+                      }
          flash.now[:notice]= "Password reset email sent"
         else
           flash.now[:alert]= "Sorry. I do not know you...."

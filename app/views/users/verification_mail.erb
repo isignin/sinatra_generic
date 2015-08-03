@@ -1,6 +1,9 @@
-Dear <%= @user.first_name %>,
+<p>Dear <%= @user.first_name %>,</p>
+<br />
+<p>We need to verify your email. Please click the link below to do that:</p>
+<br />
+<p>   http://localhost:4567/verify/<%= @user.token %></p>
+<br />
+<br />
+<p>Administrator</p>
 
-We need to verify your email. Please click the link below to do that:
-   http://localhost:4567/verify/<%= @user.token %>
-   
-Administrator
