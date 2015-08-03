@@ -66,14 +66,28 @@ describe "Routes/Users" do
   end
   
   describe "put /users/:id" do      
-      it "should update the record" do
-        user = User.create(:username => 'Mike', :first_name => 'Mike',:last_name => 'Doe', :email => Faker::Internet.email, :password=>'pass', :password_confirmation =>'pass')
-        put "/users/#{user.id}", {:user => {:username => 'mike'}} 
-        
-        expect(user.reload.username).to eq('mike')
-        expect(last_response).to be_ok
-        expect(last_response.body).to match("User Profile")
-      end
+    before :each do
+      DB.run "delete from 'users'"
+      @user = User.create(:username => 'Mike', :first_name => 'Mike',:last_name => 'Doe', :email => Faker::Internet.email, :password=>'pass', :password_confirmation =>'pass')
+    end
+    
+    it "should update the record" do        
+      put "/users/#{@user.id}", {:user => {:username => 'mike'}} 
+      expect(@user.reload.username).to eq('mike')
+      expect(last_response).to be_ok
+      expect(last_response.body).to match("User Profile")
+    end
+    
+    it "should not update if user not found" do
+      put "/users/2", {:user => {:username => 'mike'}}
+      expect(last_response.body).to match("Error: User not found")
+    end
+    
+    it "should not update if no change submitted" do
+      put "/users/#{@user.id}", {:user => {:username => 'Mike'}}
+      expect(last_response).to be_ok
+      expect(last_response.body).to match("No change to update")
+    end 
   end
   
   describe "delete /users/:id" do

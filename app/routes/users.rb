@@ -34,12 +34,21 @@ module MyApp
         
       put '/users/:id' do
          @user = User[params[:id]]
-         if !@user.nil? && @user.update(params[:user])
-           flash.now[:notice]= "Record updated successfully"
-           erb :"/users/show"
+         if !@user.nil? 
+           if @user.update(params[:user])
+             if @user.errors.empty?
+               flash.now[:notice]= "Record updated successfully"
+               erb :"/users/show"
+             else
+               flash.now[:alert]="Error encountered updating record. Please notify your administrator."
+             end
+           else
+            flash.now[:notice]= "No change to update"
+            erb :"/users/show"    
+           end
          else
-           flash.now[:alert]= "Error updating record"
-         end 
+           flash.now[:alert] = "Error: User not found"
+         end
       end
       
         
