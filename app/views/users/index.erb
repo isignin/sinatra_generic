@@ -6,8 +6,8 @@
 	  <% @users.each do |user| %>
       <tr>
   		<td><%= user.id %></td><td><a href="/users/<%= user.id %>"><%= user.username %></a></td><td><%= user.email %></td>
-  		<td><%= user.first_name+" "+ user.last_name %></td><td><%= user.password_digest %></td>
-  		<td><%= user.token %></td><td><%= user.verified %></td>
+  		<td><%= fullname(user) %></td><td><%= user.password_digest %></td>
+  		<td><%= user.token %></td><td><%= yes_no(user.verified) %></td>
   		<td><a href="/users/<%= user.id %>/edit">Edit</a></td>		
   	  </tr>
     <% end %>
